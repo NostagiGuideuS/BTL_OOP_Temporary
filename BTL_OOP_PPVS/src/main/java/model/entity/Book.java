@@ -119,4 +119,11 @@ public class Book extends Document {
     public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "Book{" + "author=" + author + ", publisher=" + publisher + ", releaseYear=" + releaseYear + '}';
+    }
+    
+    
 }

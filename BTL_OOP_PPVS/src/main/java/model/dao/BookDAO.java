@@ -2,9 +2,12 @@ package model.dao;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
+
 import model.DatabaseConnector;
 import model.entity.Book;
 
@@ -13,6 +16,58 @@ import model.entity.Book;
  * @author Littl
  */
 public class BookDAO {
+    
+    /**
+     * Lấy toàn bộ Book trên database.
+     * 
+     * @return = ?
+     * 
+     * @throws SQLException
+     * @throws IOException 
+     */
+    public static ArrayList<Book> getAllBook() throws SQLException, IOException {
+        String sql = "SELECT \n" +
+                     "		books.ISBN AS ISBN,\n" +
+                     "		documents.title AS title,\n" +
+                     "		documents.quantityLeft AS quantityAvailable,\n" +
+                     "		books.author AS author,\n" +
+                     "		books.publisher AS publisher,\n" +
+                     "		books.releaseYear AS releaseYear,\n" +
+                     "		documents.Description AS Description,\n" +
+                     "		documents.category AS category\n" +
+                     "	FROM books left join documents ON (books.isbn = documents.ID)";
+        PreparedStatement ps = DatabaseConnector.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        
+        String[] date;
+        ArrayList<Book> list = new ArrayList<>();
+        while(rs.next()) {
+            
+            Book nextBook = new Book(rs.getString(1),
+                                    rs.getString(2),
+                             rs.getInt(3),
+                                   rs.getString(4),
+                                 rs.getString(5),
+                                rs.getInt(6),
+                                rs.getString(7),
+                                  rs.getInt(8));
+            list.add(nextBook);
+        }
+        
+        ps.close();
+        rs.close();
+        return list;
+    }
+    
+    public static void main(String[] args) throws SQLException, IOException {
+        DatabaseConnector.getInstance();
+        
+        for (Book x : getAllBook()) {
+            System.out.println(x.toString());
+        }
+        
+    }
+    
     /**
      * Search Book with given keyword types below.
      * 

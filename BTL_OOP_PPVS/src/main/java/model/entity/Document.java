@@ -111,12 +111,18 @@ public abstract class Document {
     public int getCategoryEncrypt() throws IOException {
         return CategoryType.encrypt(this.category);
     }
+
+    @Override
+    public String toString() {
+        return "Document{" + "ID=" + ID + ", title=" + title + ", availableCopies=" + availableCopies + ", category=" + category + ", description=" + description;
+    }
+    
     
     
     public static class CategoryType {
         static private HashMap<Integer, String> decoder;
         static private HashMap<String, Integer> encrypter;
-        static private String path = "src\\image\\Document Category.txt";
+        static private String path = "src\\main\\java\\image\\Document Category.txt";
         
         private static void loadDecoder() throws IOException {
             decoder = new HashMap<>();
@@ -188,4 +194,5 @@ public abstract class Document {
             return result;
         }
     }
+    
 }
